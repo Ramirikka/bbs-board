@@ -86,7 +86,7 @@ function render(){if(!D)return;const x=B[bot],b=D.bots[bot]||{rows:[]};
  $("#tools").innerHTML=tab=="pos"?`<div class="seg"><span class="${seg=="active"?"on":""}" onclick="seg='active';render()">Active</span><span class="${seg=="closed"?"on":""}" onclick="seg='closed';render()">Closed</span></div><label class="search">⌕<input id="q" placeholder="Search positions" value="${q}"></label>`:"";
  const qi=$("#q");if(qi){qi.oninput=e=>{q=e.target.value;list()};}
  list();
- $("#foot").textContent="Updated "+new Date(D.updated*1000).toLocaleString()+" · PolyCop is real money; Praxela and Surrealexa are paper trades (real order book, fees included). Refreshes every 10 minutes.";
+ $("#foot").textContent="Updated "+new Date(D.updated*1000).toLocaleString()+" · PolyCop is real money; Praxela and Surrealexa are paper trades (real order book, fees included). Refreshes every 2 minutes.";
 }
 function list(){const b=D.bots[bot]||{rows:[]};let h="";
  if(tab=="pos"){let rows=b.rows.filter(r=>seg=="active"?r.status=="open":r.status!="open").filter(r=>(r.title||"").toLowerCase().includes(q.toLowerCase()));
@@ -107,6 +107,6 @@ function draw(H){const cv=$("#ch"),r=devicePixelRatio||1,W=cv.clientWidth,Ht=120
   if(k==bot){const gr=g.createLinearGradient(0,0,0,Ht);gr.addColorStop(0,"rgba(22,82,240,.20)");gr.addColorStop(1,"rgba(139,92,246,0)");g.beginPath();g.moveTo(P[0][0],Ht);P.forEach(p=>g.lineTo(...p));g.lineTo(P[P.length-1][0],Ht);g.fillStyle=gr;g.fill();
    const lg=g.createLinearGradient(0,0,W,0);lg.addColorStop(0,"#1652f0");lg.addColorStop(1,"#8b5cf6");g.strokeStyle=lg;g.lineWidth=2.5;g.globalAlpha=1}else{g.strokeStyle=B[k].hex;g.lineWidth=1.5;g.globalAlpha=.3}
   g.beginPath();P.forEach((p,i)=>i?g.lineTo(...p):g.moveTo(...p));g.stroke();g.globalAlpha=1})}
-async function load(){try{D=await (await fetch("data.json?"+Date.now())).json();render()}catch(e){$("#list").innerHTML='<div class="empty">Waiting for the first update…</div>'}}
+async function load(){try{D=await (await fetch("https://raw.githubusercontent.com/Ramirikka/bbs-board/data/data.json?"+Date.now(),{cache:"no-store"}).catch(()=>fetch("data.json?"+Date.now()))).json();render()}catch(e){$("#list").innerHTML='<div class="empty">Waiting for the first update…</div>'}}
 load();setInterval(load,60000);addEventListener("resize",()=>D&&render());
 </script></body></html>
